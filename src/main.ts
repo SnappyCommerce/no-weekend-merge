@@ -25,7 +25,9 @@ async function run(): Promise<void> {
       if (isInDowntime(currentDate, utcAdjustments, downtime)) {
         core.info(`Failed downtime: ${downtime}`)
         core.info(`Current Date: ${currentDate}`)
-        core.info(`Day (0-6): ${currentDate.getUTCDay()}`)
+        core.info(
+          `Day: ${days[currentDate.getUTCDay()]} (${currentDate.getUTCDay()})`
+        )
         core.setFailed(
           `The PR cannot be merged at this time (${currentDate}) with the current settings (${downtime}).`
         )
