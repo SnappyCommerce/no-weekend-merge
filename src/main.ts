@@ -10,18 +10,20 @@ async function run(): Promise<void> {
     const tz = parseFloat(core.getInput('tz'))
     const utcAdjustments = getUTCAdjustments(tz)
 
+	// Apply UTC adjustments to the current-time
     currentDate.setUTCHours(currentDate.getUTCHours() + utcAdjustments.hours)
     currentDate.setUTCMinutes(
       currentDate.getUTCMinutes() + utcAdjustments.minutes
     )
 
-    core.debug(`TZ: ${tz} - Day: ${currentDate.getUTCDay()}`)
+    core.info(`TZ: ${tz} - Day: ${currentDate.getUTCDay()}`)
 
     const downtimes = core.getInput(days[currentDate.getUTCDay()]) || ''
-    core.debug(`Downtimes: ${downtimes}`)
+    core.info(`Downtimes: ${downtimes}`)
 
     for (const downtime of downtimes.split(',')) {
       if (isInDowntime(currentDate, utcAdjustments, downtime)) {
+		core.info(`Failed downtime: ${downtime} - ${currentDate}`);
         core.setFailed(
           `The PR cannot be merged at this time (${currentDate}) with the current settings (${downtime}).`
         )

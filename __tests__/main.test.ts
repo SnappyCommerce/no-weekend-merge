@@ -34,3 +34,18 @@ describe('isInDowntime should', () => {
     expect(isInDowntime(currentDate, utcAdjustments, '16:30-23:59')).toBe(false)
   })
 })
+
+describe('isInDowntime should (UTC -3)', () => {
+  const utcAdjustments = getUTCAdjustments(-3)
+  const downtimeString = '00:00-07:00,19:00-23:59';
+
+	test('Should not be in downtime', () => {
+		const currentDate = new Date(Date.UTC(2024, 8, 11, 44, 3))
+		expect(isInDowntime(currentDate, utcAdjustments, downtimeString)).toBe(false)
+	})
+	
+	test('Should be in downtime', () => {
+		const currentDate = new Date(Date.UTC(2024, 8, 9, 44, 3))
+		expect(isInDowntime(currentDate, utcAdjustments, downtimeString)).toBe(false)
+	})
+})
